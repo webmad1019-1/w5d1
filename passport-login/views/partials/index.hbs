@@ -1,0 +1,14 @@
+<h1>Hello {{user.username}} - You are {{user.role}}</h1>
+<p>View <a href="private-page">private page</a></p>
+
+{{#is user.role 'ADMIN'}}
+<p>You can only see this if you are an ADMIN</p>
+{{/is}}
+
+{{#is user.role 'EDITOR'}}
+<p>You can only see this if you are an EDITOR</p>
+{{/is}}
+
+<p>Rest of the contents are for everyone</p>
+
+<a href="logout">Logout</a>
