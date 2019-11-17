@@ -15,13 +15,13 @@
 
 # Today - day w5d1
 
-- More on PassportJS
+- PassportJS
 - Social login
 
 ## Activities
 
 - Using PassportJS to authenticate
-- Asign roles using PassportJS
+- Assign roles using PassportJS
 
 # Next - day w5d2
 
