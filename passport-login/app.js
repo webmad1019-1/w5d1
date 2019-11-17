@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 // web server
 const express = require("express");
 // express instantiation
@@ -37,7 +38,7 @@ mongoose
   .then(() => {
     console.log("Connected to Mongo!");
   })
-  .catch(err => {
+  .catch((err) => {
     console.error("Error connecting to mongo", err);
   });
 
@@ -68,10 +69,6 @@ passport.use(
       passReqToCallback: true
     },
     (req, username, password, next) => {
-      console.log("login");
-      console.log(username);
-      console.log(password);
-
       User.findOne(
         {
           username
@@ -81,7 +78,6 @@ passport.use(
             return next(err);
           }
 
-          console.log(user);
           if (!user) {
             return next(null, false, {
               message: "Incorrect username"
@@ -100,15 +96,45 @@ passport.use(
   )
 );
 
+// as per https://stackoverflow.com/a/27637668/1175555
+// This gets called when we log in
+// The user id (you provide as the second argument of the done function) is saved in the session
+// and is later used to retrieve the whole object via the deserializeUser function.
+// serializeUser determines which data of the user object should be stored in the session.
+// The result of the serializeUser method is attached to the session as req.session.passport.user = {}.
+// Here for instance, it would be (as we provide the user id as the key) req.session.passport.user = {id: 'xyz'}
 passport.serializeUser((user, cb) => {
   console.log("serialize");
-  console.log(user._id);
+  console.log(`storing ${user._id} in the session`);
   cb(null, user._id);
 });
 
+/*
+The first argument of deserializeUser corresponds to the key of the user object that was given to the done function. So your whole object is retrieved with help of that key. That key here is the user id (key can be any key of the user object i.e. name,email etc). In deserializeUser that key is matched with the in memory array / database or any data resource.
+The fetched object is attached to the request object as req.user
+
+passport.serializeUser(function(user, done) {
+    done(null, user.id);
+});              │
+                 │ 
+                 │
+                 └─────────────────┬──→ saved to session
+                                   │    req.session.passport.user = {id: '..'}
+                                   │
+                                   ↓           
+passport.deserializeUser(function(id, done) {
+                   ┌───────────────┘
+                   │
+                   ↓ 
+    User.findById(id, function(err, user) {
+        done(err, user);
+    });            └──────────────→ user object attaches to the request as req.user   
+});
+*/
 passport.deserializeUser((id, cb) => {
   console.log("deserialize");
-  console.log(id);
+  console.log(`Attaching ${id} to req.user`);
+  // eslint-disable-next-line consistent-return
   User.findById(id, (err, user) => {
     if (err) {
       return cb(err);
@@ -128,15 +154,14 @@ app.get("/", ensureLogin.ensureLoggedIn(), (req, res) => {
   });
 });
 
-app.get("/signup", (req, res, next) => {
+app.get("/signup", (req, res) => {
   res.render("base", {
     section: "signup"
   });
 });
 
 app.post("/signup", (req, res, next) => {
-  const username = req.body.username;
-  const password = req.body.password;
+  const { username, password } = req.body;
 
   if (username === "" || password === "") {
     res.render("base", {
@@ -149,7 +174,7 @@ app.post("/signup", (req, res, next) => {
   User.findOne({
     username
   })
-    .then(user => {
+    .then((user) => {
       if (user !== null) {
         res.render("base", {
           message: "The username already exists",
@@ -166,7 +191,7 @@ app.post("/signup", (req, res, next) => {
         password: hashPass
       });
 
-      newUser.save(err => {
+      newUser.save((err) => {
         if (err) {
           res.render("base", {
             message: "Something went wrong",
@@ -177,12 +202,12 @@ app.post("/signup", (req, res, next) => {
         }
       });
     })
-    .catch(error => {
+    .catch((error) => {
       next(error);
     });
 });
 
-app.get("/login", (req, res, next) => {
+app.get("/login", (req, res) => {
   res.render("base", {
     message: req.flash("error"),
     section: "login"
@@ -201,6 +226,7 @@ app.post(
 );
 
 function checkRoles(roles) {
+  // eslint-disable-next-line
   return function(req, res, next) {
     if (req.isAuthenticated() && roles.includes(req.user.role)) {
       return next();
@@ -233,8 +259,6 @@ app.get("/private-page-admin", checkAdmin, (req, res) => {
 });
 
 app.get("/private-page", ensureLogin.ensureLoggedIn(), (req, res) => {
-  console.log("private page");
-  console.log(req.session);
   res.render("base", {
     user: req.user,
     section: "private"
@@ -246,4 +270,4 @@ app.get("/logout", (req, res) => {
   res.redirect("/login");
 });
 
-app.listen(3000);
+app.listen(3100);
