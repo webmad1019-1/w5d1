@@ -63,6 +63,18 @@ app.use(
   })
 );
 
+/* as per https://stackoverflow.com/a/11784742/1175555
+
+if you had 3 form fields: username, password, & foo
+by using passReqToCallback: true as:
+
+passport.use(new LocalStrategy(
+  {usernameField: 'email', passReqToCallback: true},
+  function(req, email, password, done) {
+     -> now you can check req.body.foo
+  }
+)); */
+
 passport.use(
   new LocalStrategy(
     {
