@@ -4,6 +4,7 @@ const express = require("express");
 // express instantiation
 const app = express();
 // session management. we need this so we can hold the user id
+// as per https://stackoverflow.com/a/5343261/1175555 and as per https://www.npmjs.com/package/express-session#secret
 const session = require("express-session");
 // cipher algorithm with on-purpose delay
 const bcrypt = require("bcrypt");
@@ -16,6 +17,7 @@ const LocalStrategy = require("passport-local").Strategy;
 // middleware which validates you are logged in - otherwise it redirects you
 const ensureLogin = require("connect-ensure-login");
 // holds temporary information which is self-destroyed after being used. One-off in the session
+/* The flash is a special area of the session used for storing messages. Messages are written to the flash and cleared after being displayed to the user. The flash is typically used in combination with redirects, ensuring that the message is available to the next page that is to be rendered. as per https://github.com/jaredhanson/connect-flash */
 const flash = require("connect-flash");
 // it is our favourite ODM - gives you functionality on top of mongodb
 const mongoose = require("mongoose");
@@ -25,14 +27,13 @@ const bodyParser = require("body-parser");
 const path = require("path");
 // handlebars templating
 const hbs = require("hbs");
-// handlebars utilities
+// handlebars utilities as per https://www.npmjs.com/package/swag
 const Swag = require("swag");
 // here you boot up swag so it is available in the views (made with handlebars)
 Swag.registerHelpers(hbs);
 
 const User = require("./models/user");
 
-mongoose.Promise = Promise;
 mongoose
   .connect("mongodb://localhost/basic-auth")
   .then(() => {
@@ -65,6 +66,8 @@ app.use(
 
 /* as per https://stackoverflow.com/a/11784742/1175555
 
+This is the basic setup for what happens when you try to login using passport
+
 if you had 3 form fields: username, password, & foo
 by using passReqToCallback: true as:
 
@@ -86,6 +89,7 @@ passport.use(
           username
         },
         (err, user) => {
+          // todo: watch with mongodb stopped
           if (err) {
             return next(err);
           }
@@ -119,6 +123,7 @@ passport.serializeUser((user, cb) => {
   console.log("serialize");
   console.log(`storing ${user._id} in the session`);
   cb(null, user._id);
+  // cb(null, {id: user._id, role: user.role});
 });
 
 /*
@@ -235,6 +240,17 @@ app.post(
     passReqToCallback: true
   })
 );
+
+// basic curry
+/*
+function sum(n) {
+	return function(m) {
+		console.log(n + m)
+    }
+}
+let sum10 = sum(10)
+sum10(20) //yields 30
+*/
 
 function checkRoles(roles) {
   // eslint-disable-next-line

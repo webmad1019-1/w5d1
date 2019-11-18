@@ -8,9 +8,10 @@
 <script>
 	window.accessToken = "{{user.accessToken}}";
 
-	fetch("https://slack.com/api/users.profile.get?token=" + window.accessToken)
+	fetch("https://slack.com/api/users.profile.get?token={{user.accessToken}}")
 	.then(json => json.json())
 	.then(json => {
+		debugger
 		const profile = json.profile
 		document.querySelector(".profile img").setAttribute("src", profile.image_512)
 		document.querySelector(".profile").style.display = "block"

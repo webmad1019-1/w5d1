@@ -37,4 +37,4 @@
 
 # Bonus
 
-PassportJS strategies http://www.passportjs.org/packages/
+PassportJS strategies http://www.passportjs.org and then go to strategies
