@@ -151,7 +151,6 @@ passport.deserializeUser((id, cb) => {
     if (err) {
       return cb(err);
     }
-    console.log(user);
     cb(null, user);
   });
 });
@@ -282,4 +281,4 @@ app.get("/logout", (req, res) => {
   res.redirect("/login");
 });
 
-app.listen(3100);
+app.listen(3000);
