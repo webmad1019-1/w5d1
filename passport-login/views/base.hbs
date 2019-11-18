@@ -2,30 +2,27 @@
 <html lang="en">
 
 <head>
-  <title>Hello, world!</title>
-  <!-- Required meta tags -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-  <!-- Bootstrap CSS -->
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb"
-    crossorigin="anonymous">
+  <title>Login and Signup with Passport</title>
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/styles.css">
 </head>
 
 <body>
   {{#is section "signup"}}
-    {{> signup}}
+  {{> signup}}
   {{/is}}
   {{#is section "index"}}
-    {{> index}}
+  {{> index}}
   {{/is}}
   {{#is section "login"}}
-    {{> login}}
+  {{> login}}
   {{/is}}
   {{#is section "private"}}
-    {{> private}}
+  {{> private}}
   {{/is}}
-  
+
 </body>
 
 </html>

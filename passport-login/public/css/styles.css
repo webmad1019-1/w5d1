@@ -1,0 +1,72 @@
+html {
+  font-size: 10px;
+}
+
+body {
+  font-size: 2rem;
+  /* display: flex;
+  justify-content: center;
+  align-items: center; */
+  
+}
+
+.credentials-form {
+  min-height: 100vh;
+  
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.credentials-form form {
+  max-width: 40rem;
+  border-radius: 1rem;
+  border:1px solid black;
+  padding: 2rem;
+  flex-direction: column;
+}
+
+.credentials-form h2 {
+  text-align: center;
+  margin-bottom: 2rem;
+  font-size: 3rem;
+}
+
+.credentials-form label {
+  width: 10rem;
+  display: inline-block;
+}
+
+.credentials-form div {
+  margin-bottom: 1rem;
+}
+
+.credentials-form div:nth-child(3) {
+  margin-bottom: 2.5rem;
+}
+
+.credentials-form .options {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.credentials-form .options input[type=submit] {
+  margin-right: 2rem;
+}
+
+.credentials-form .error-message {
+  color: red;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+header {
+  padding: 2rem;
+  background: #efefef;
+  margin-bottom: 2rem;
+}
+
+section {
+  padding: 2rem;
+}
