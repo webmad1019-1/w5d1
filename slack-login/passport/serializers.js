@@ -1,15 +1,15 @@
-const User = require('../models/User');
-const passport = require('passport');
+const passport = require("passport");
+const User = require("../models/User");
 
 passport.serializeUser((user, cb) => {
-    cb(null, user._id);
+  cb(null, user._id);
 });
 
 passport.deserializeUser((id, cbo) => {
-    User.findById(id, (err, user) => {
-        if (err) {
-            return cb(err);
-        }
-        cbo(null, user);
-    });
+  User.findById(id, (err, user) => {
+    if (err) {
+      return cb(err);
+    }
+    cbo(null, user);
+  });
 });
