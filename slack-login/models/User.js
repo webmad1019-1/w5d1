@@ -4,7 +4,8 @@ const Schema = mongoose.Schema;
 const userSchema = new Schema(
   {
     username: String,
-    slackID: String
+    slackID: String,
+    accessToken: String
   },
   {
     timestamps: {

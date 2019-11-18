@@ -17,7 +17,8 @@ passport.use(
             User.findByIdAndUpdate(
               user._id,
               {
-                username: profile.user.name
+                username: profile.user.name,
+                accessToken: accessToken
               },
               { new: true }
             ).then((user) => {
@@ -26,11 +27,12 @@ passport.use(
           } else {
             const newUser = new User({
               username: profile.user.name,
-              slackID: profile.id
+              slackID: profile.id,
+              accessToken: accessToken
             });
 
             newUser.save().then((user) => {
-              done(null, newUser);
+              done(null, user);
             });
           }
         })

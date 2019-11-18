@@ -1,6 +1,21 @@
 {{#if user.username}}
 <h1>According to Slack you are "{{user.username}}"</h1>
-{{user}}
+<p>Database info: {{user}}</p>
+<div class="profile" style="display: none;">
+	<img src="" alt="" />
+</div>
+
+<script>
+	window.accessToken = "{{user.accessToken}}";
+
+	fetch("https://slack.com/api/users.profile.get?token=" + window.accessToken)
+	.then(json => json.json())
+	.then(json => {
+		const profile = json.profile
+		document.querySelector(".profile img").setAttribute("src", profile.image_512)
+		document.querySelector(".profile").style.display = "block"
+	})
+</script>
 {{else}}
 <h1>Welcome to the social login with Slack</h1>
 <h3>Please login using the Slack login button</h3>
