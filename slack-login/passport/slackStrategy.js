@@ -23,16 +23,16 @@ passport.use(
             ).then((user) => {
               return done(null, user);
             });
+          } else {
+            const newUser = new User({
+              username: profile.user.name,
+              slackID: profile.id
+            });
+
+            newUser.save().then((user) => {
+              done(null, newUser);
+            });
           }
-
-          const newUser = new User({
-            username: profile.user.name,
-            slackID: profile.id
-          });
-
-          newUser.save().then((user) => {
-            done(null, newUser);
-          });
         })
         .catch((error) => {
           done(error);
